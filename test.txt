@@ -1,0 +1,14 @@
+Author / 作者: Charles Dickens / 查尔斯·狄更斯
+Source / 出处: A Tale of Two Cities / 《双城记》 (1859)
+
+It was the best of times, it was the worst of times,
+it was the age of wisdom, it was the age of foolishness,
+it was the epoch of belief, it was the epoch of incredulity,
+it was the season of Light, it was the season of Darkness,
+it was the spring of hope, it was the winter of despair.
+
+这是最好的时代，也是最坏的时代；
+这是智慧的时代，也是愚昧的时代；
+这是信仰的时期，也是怀疑的时期；
+这是光明的季节，也是黑暗的季节；
+这是希望之春，也是绝望之冬。
