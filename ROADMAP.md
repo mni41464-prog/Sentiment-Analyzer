@@ -1,348 +1,397 @@
-# 🗺️ Sentiment Analyzer Roadmap / 项目路线图
+# 🗺️ Sentiment Analyzer Roadmap
 
-This document records the ideas, limitations, and possible future directions of Sentiment Analyzer.
+> **From sentiment scoring to understanding emotional structure.**  
+> **从“判断情绪”逐渐走向“理解情绪为什么发生变化”。**
 
-本文用于记录 Sentiment Analyzer 当前发现的问题，以及未来可能实现的功能和升级方向。
+The current version can analyze sentiment flow, detect major emotional changes, and map those changes back to the original text.
 
----
+当前版本已经可以分析情感走势、检测关键情绪变化，并将变化重新定位到原文。
 
-## 📌 Current Version / 当前版本
+The long-term goal is to make the system understand not only **what the emotion is**, but also:
 
-### v1.1.0 — Sentiment Flow
+> **Where did it change? Why did it change? What caused it? What may happen next?**
 
-The current version can:
+未来希望它不只是告诉我们“情绪是什么”，而是进一步理解：
 
-- Analyze web articles from URLs
-- Analyze local TXT files
-- Calculate overall sentiment polarity
-- Analyze sentiment by text segment
-- Handle long texts automatically
-- Compress long-text results into approximately 50 visualization regions
-- Preserve approximate character positions in the original text
-- Visualize sentiment changes
-- Highlight the most positive and negative regions
-
-当前版本已经支持：
-
-- 分析网页 URL 中的文章
-- 分析本地 TXT 文本
-- 计算全文整体情感倾向
-- 对文本进行分段情感分析
-- 自动处理长文本
-- 将长文本分析结果压缩为约 50 个可视化区域
-- 保留对应内容在原文中的大致字符位置
-- 绘制全文情感变化趋势
-- 标记最积极和最消极的情绪区域
+> **情绪在哪里发生变化？为什么变化？什么内容导致了变化？接下来可能如何发展？**
 
 ---
 
-# 🚀 Future Directions / 未来方向
+## 🧠 Phase 1 — Smarter Sentiment Understanding
+## 更智能的情绪理解
 
-## 1. 📈 Sentiment Change Detection / 情绪变化检测
+### Context-Aware Sentiment / 上下文情感分析
 
-The current version measures the sentiment level at different positions in the text.
+Current sentiment analysis mainly evaluates individual text regions.
 
-当前版本主要回答：
-
-> What is the sentiment at this position?  
-> 这个位置的情绪是什么？
-
-For example:
+Future versions could consider surrounding context:
 
 ```text
-Segment 1:  0.8
-Segment 2:  0.8
-Segment 3:  0.2
-Segment 4: -0.6
+Previous Context
+       ↓
+Current Sentence
+       ↓
+Following Context
+       ↓
+Context-Aware Sentiment
 ```
 
-A future version could also calculate the change between neighboring sentiment values:
-
-未来可以进一步计算相邻区域之间的情绪变化：
-
-```text
-Sentiment Change = Current Sentiment - Previous Sentiment
-情绪变化 = 当前情绪 - 上一位置情绪
-```
-
-For example:
-
-```text
-0.8 →  0.8    Change:  0.0   Stable / 持平
-0.8 →  0.2    Change: -0.6   Falling / 下降
-0.2 → -0.6    Change: -0.8   Sharp Drop / 剧烈下降
-```
-
-This would allow the program to distinguish between:
-
-这可以让程序进一步区分：
-
-> What is the current emotion?  
-> 当前是什么情绪？
-
-and:
-
-> How is the emotion changing?  
-> 情绪正在如何变化？
+不再孤立地判断一句话，而是结合前后文理解它真正表达的情绪。
 
 ---
 
-## 2. ⚡ Emotional Turning Point Detection / 情绪转折点检测
+### 🎭 Sarcasm & Irony Detection / 反讽与讽刺识别
 
-After calculating sentiment changes, the program could automatically detect regions where emotion changes dramatically.
-
-在拥有情绪变化数据之后，可以进一步自动寻找全文中情绪变化最剧烈的位置。
-
-For example:
+Example:
 
 ```text
-Positive / 积极
-      ↓
-Positive / 积极
-      ↓
-Neutral / 中性
-      ↓
-Negative / 消极   ← Emotional Turning Point / 情绪转折点
+"Oh great, another three-hour meeting."
 ```
 
-The current version identifies:
+A simple sentiment model may interpret **"great"** as positive.
 
-当前版本已经可以寻找：
+A smarter model should recognize that the actual meaning may be negative.
 
-```text
-🟢 Most Positive Region / 最积极区域
-🔴 Most Negative Region / 最消极区域
-```
+未来希望模型能够识别：
 
-A future version could additionally identify:
-
-未来还可以加入：
-
-```text
-🟡 Strongest Emotional Change / 情绪变化最剧烈区域
-```
-
-This would help locate not only emotional extremes, but also important transitions in the text.
-
-这样不仅可以知道全文“哪里最积极、哪里最消极”，还可以知道“情绪在哪里发生了明显转折”。
+- Sarcasm / 讽刺
+- Irony / 反讽
+- Hidden negativity / 隐性负面表达
+- Emotional contradiction / 表面情绪与真实语义冲突
 
 ---
 
-## 3. 🧠 Context-Aware Sentiment Analysis / 上下文情感分析
+### 🌍 Multilingual Sentiment / 多语言情感分析
 
-The current TextBlob-based approach mainly analyzes lexical sentiment and has limited understanding of deeper context.
-
-当前基于 TextBlob 的方法主要依赖词汇层面的情感信息，对复杂上下文的理解能力有限。
-
-For example:
+Extend the project beyond English:
 
 ```text
-"You are really smart."
-```
-
-may express genuine praise.
-
-可能是真正的夸奖。
-
-But:
-
-```text
-"You are really smart. You managed to break the easiest thing."
-```
-
-may express a completely different meaning depending on context.
-
-但结合后面的语境，这句话可能表达完全不同的真实情绪。
-
-A future version could use context-aware NLP models to analyze relationships between words, sentences, and surrounding context.
-
-未来可以尝试使用能够理解上下文的 NLP 模型，而不仅仅根据单独的情感词汇进行判断。
-
----
-
-## 4. 🎭 Sarcasm & Irony Detection / 反讽与阴阳怪气识别
-
-Sarcasm is a difficult problem for traditional sentiment analysis.
-
-反讽是传统情感分析中比较困难的问题之一。
-
-For example:
-
-```text
-"Great. My computer crashed again."
-```
-
-The word:
-
-```text
-"Great"
-```
-
-looks positive.
-
-单独看是一个明显的正面表达。
-
-But:
-
-```text
-"My computer crashed again."
-```
-
-provides negative context.
-
-但后面的“电脑又崩溃了”明显是负面事件。
-
-The combination may indicate sarcasm:
-
-两者结合起来可能形成反讽：
-
-```text
-Positive Expression / 正面表达
-            +
-Negative Context / 负面语境
-            ↓
-Possible Sarcasm / 可能存在反讽
-```
-
-Future versions could explore models specifically designed to understand contextual contradiction, sarcasm, and irony.
-
-未来可以进一步研究上下文矛盾、反讽以及阴阳怪气等更加复杂的语义现象。
-
----
-
-## 5. 🤖 Deep Learning NLP Model / 深度学习 NLP 模型
-
-A future major version could replace or complement TextBlob with a modern neural NLP model.
-
-未来的大版本可以尝试使用现代深度学习 NLP 模型替代或补充 TextBlob。
-
-Possible evolution:
-
-可能的发展路线：
-
-```text
-TextBlob
+English
+Chinese
+Japanese
+...
    ↓
-Lexical Sentiment Analysis
-词汇情感分析
-   ↓
-Context-Aware NLP
-上下文 NLP
-   ↓
-Transformer / BERT
-   ↓
-Deep Learning Sentiment Model
-深度学习情感模型
+Unified Sentiment Analysis
 ```
 
-This would also connect the project with PyTorch and modern deep learning.
+未来希望支持真正的多语言情感分析，而不是简单依赖英文词典。
 
-这也可以让项目进一步与 PyTorch 和现代深度学习结合。
+---
 
-Possible topics include:
+## ⚡ Phase 2 — Emotional Turning Points
+## 情绪转折点
 
-可能涉及：
+Not every sentiment change is equally important.
 
-- Tokenization / 文本分词与 Token 化
-- Embeddings / 词向量与文本表示
-- Neural Networks / 神经网络
-- Loss Functions / 损失函数
-- Model Training / 模型训练
+The analyzer could automatically identify meaningful emotional turning points:
+
+```text
+Stable
+Stable
+Stable
+   ↓
+Sudden Drop  ← Turning Point
+   ↓
+Negative
+Negative
+   ↓
+Recovery     ← Turning Point
+```
+
+未来不仅寻找最大变化，还可以检测：
+
+- Sudden emotional shifts / 突然的情绪变化
+- Emotional recovery / 情绪恢复
+- Long negative periods / 持续低情绪区域
+- Emotional peaks / 情绪高潮
+- Repeated emotional oscillation / 反复情绪波动
+
+---
+
+## 🔍 Phase 3 — Why Did the Emotion Change?
+## 为什么情绪发生变化？
+
+This is one of the most interesting future directions.
+
+Instead of only reporting:
+
+```text
+Sentiment dropped by -0.72
+```
+
+the system could attempt to explain:
+
+```text
+Strong Negative Shift Detected
+
+Possible Trigger:
+"The company announced that 2,000 employees
+would lose their jobs."
+
+Before:
+Neutral discussion
+
+After:
+Strong negative sentiment
+
+Possible reason:
+Job-loss announcement
+```
+
+也就是说，从：
+
+> **“这里情绪下降了。”**
+
+进一步发展到：
+
+> **“这里情绪下降，可能是因为文本中发生了这件事。”**
+
+This would move the project from **sentiment detection** toward **event-aware emotional analysis**.
+
+---
+
+## 🧩 Phase 4 — Emotion Categories
+## 从正负情绪到具体情绪
+
+Positive / negative scores are very limited.
+
+Future versions could recognize richer emotions:
+
+```text
+Joy        😄
+Sadness    😢
+Anger      😠
+Fear       😨
+Surprise   😮
+Disgust    🤢
+Neutral    😐
+```
+
+Then the visualization could become an **emotional timeline** rather than only a polarity curve.
+
+未来可以从单纯的：
+
+```text
+Positive ←→ Negative
+```
+
+升级为：
+
+```text
+Joy → Surprise → Fear → Sadness → Hope
+```
+
+这样会更接近真正的“文本情绪结构”。
+
+---
+
+## 🧠 Phase 5 — Deep Learning Upgrade
+## 深度学习升级
+
+Replace or complement the current TextBlob-based analyzer with modern NLP models.
+
+Possible directions:
+
+- PyTorch
 - Transformers
-- BERT-based Sentiment Classification / 基于 BERT 的情感分类
+- BERT / RoBERTa
+- Sentence Transformers
+- Fine-tuned sentiment models
+- Emotion classification models
 
-This could become the foundation of a future **v2.0**.
-
-这可以作为未来 **v2.0** 的主要升级方向。
-
----
-
-## 6. 🌏 Multilingual Sentiment Analysis / 多语言情感分析
-
-The current version mainly targets English text because TextBlob is much more suitable for English sentiment analysis.
-
-当前版本主要面向英文文本，因为 TextBlob 更适合英文情感分析。
-
-A future version could explore multilingual models capable of analyzing:
-
-未来可以尝试支持：
+Possible architecture:
 
 ```text
-English / 英文
-Chinese / 中文
-Multilingual Text / 多语言文本
+Text
+ ↓
+Tokenizer
+ ↓
+Transformer
+ ↓
+Context Representation
+ ↓
+Sentiment / Emotion Model
+ ↓
+Visualization & Interpretation
 ```
 
-This would allow the analyzer to work with a much wider range of text sources.
-
-这样可以让项目真正扩展到更加广泛的文本内容。
+这一步会把项目从基于词典的情感分析逐渐升级到真正的上下文 NLP 模型。
 
 ---
 
-# 🎯 Long-Term Goal / 长期目标
+## 📖 Phase 6 — Narrative Intelligence
+## 故事与文章的“情绪结构”
 
-The current project mainly answers:
+For long-form text such as novels, news articles, speeches, or stories, the analyzer could attempt to discover larger emotional structures.
 
-当前项目主要回答：
+For example:
 
-> **What is the sentiment of this text?**  
-> **这段文本是什么情绪？**
+```text
+Beginning
+   ↓
+Hope
+   ↓
+Conflict
+   ↓
+Emotional Decline
+   ↓
+Lowest Point
+   ↓
+Recovery
+   ↓
+Ending
+```
 
-The next step could be:
+Possible features:
 
-下一步可以进一步回答：
+- Detect emotional arcs / 自动识别情绪弧线
+- Compare chapters / 比较章节情绪
+- Detect climax / 寻找情绪高潮
+- Detect emotional resolution / 判断情绪是否得到缓解
+- Compare characters or topics / 比较人物或主题的情绪变化
 
-> **How does the emotion change throughout the text?**  
-> **情绪在全文中是如何变化的？**
+---
 
-And eventually:
+## 🧭 Phase 7 — Topic × Emotion
+## “什么事情”对应“什么情绪”
 
-最终希望逐渐探索：
+A future version could combine topic detection with sentiment analysis.
 
-> **What does the author actually mean in context?**  
-> **结合上下文，作者真正想表达什么？**
+Instead of:
 
-The long-term goal is to gradually move from:
+```text
+Position 3200 → Sentiment -0.68
+```
 
-长期方向是从：
+it could produce:
+
+```text
+Topic: Employment
+Sentiment: Negative
+
+Topic: Technology
+Sentiment: Positive
+
+Topic: Economy
+Sentiment: Mixed
+```
+
+This could be especially useful for:
+
+- News analysis / 新闻分析
+- Reviews / 评论分析
+- Speeches / 演讲分析
+- Reports / 报告分析
+- Social text / 社交文本分析
+
+---
+
+## 🔗 Phase 8 — Emotional Cause Graph
+## 情绪因果关系图
+
+A more experimental idea:
+
+Instead of representing a document only as a line chart, represent important events and emotional changes as a graph.
+
+```text
+Event A
+  │
+  ▼
+Concern
+  │
+  ▼
+Event B ─────→ Strong Negative Shift
+                 │
+                 ▼
+              Event C
+                 │
+                 ▼
+              Recovery
+```
+
+The goal would be to explore relationships between:
+
+```text
+Event → Context → Emotion → Change
+```
+
+这会让项目从“画情绪曲线”进一步走向“分析文本中的事件与情绪关系”。
+
+---
+
+## 🔮 Experimental Ideas
+## 一些脑洞
+
+Some ideas may be experimental rather than guaranteed features:
+
+- **Emotional Summary**  
+  自动生成整篇文本的情绪变化摘要
+
+- **Ask the Text**  
+  允许用户提问：“为什么这里情绪突然下降？”
+
+- **Compare Two Texts**  
+  比较两篇新闻、小说或评论的情绪结构
+
+- **Character Emotion Tracking**  
+  在小说中分别追踪不同人物的情绪变化
+
+- **Automatic Chapter Analysis**  
+  自动识别章节并生成章节级情绪地图
+
+- **Emotion Heatmap**  
+  直接在原文上用颜色标记不同情绪区域
+
+- **Interactive Timeline**  
+  点击曲线上的点，直接跳转到对应原文
+
+- **Emotion Search**  
+  搜索“全文最愤怒的部分”“最悲伤的部分”“情绪反转最大的地方”
+
+- **Emotion-Based Text Navigation**  
+  不按照页码阅读，而按照情绪节点浏览长文本
+
+- **Local AI Model Support**  
+  尝试使用本地模型进行更复杂的语义分析
+
+---
+
+## 🎯 Long-Term Vision / 长期目标
+
+The project started with a simple question:
+
+> **Is this text positive or negative?**
+
+It is gradually evolving toward a more interesting question:
+
+> **How does emotion develop throughout a text, what causes it to change, and what does that reveal about the text itself?**
+
+这个项目最开始解决的是一个很简单的问题：
+
+> **“这篇文本是积极还是消极？”**
+
+未来希望它逐渐能够回答：
+
+> **“情绪是怎样发展的？在哪里发生转折？什么内容导致了变化？这些变化又反映了文本怎样的结构？”**
 
 ```text
 Sentiment Score
-情感打分
-
       ↓
-
 Sentiment Flow
-情感趋势
-
       ↓
-
 Sentiment Change
-情绪变化
-
       ↓
-
+Turning Points
+      ↓
+Emotion Recognition
+      ↓
 Context Understanding
-上下文理解
-
       ↓
-
-Sarcasm & Deeper Semantic Understanding
-反讽与更深层语义理解
+Event Understanding
+      ↓
+Why Did It Change?
 ```
 
-The goal is not simply to add more features, but to gradually explore deeper levels of natural language understanding.
+**The goal is not simply to produce more scores — it is to make those scores increasingly meaningful.**
 
-项目未来的目标并不只是不断增加功能，而是逐渐从简单的情感打分，深入到对文本情绪变化、上下文以及真实语义的理解。
-
----
-
-<div align="center">
-
-### From Sentiment Scores to Context Understanding
-
-### 从情感打分，到上下文理解
-
-**Sentiment Analyzer Roadmap**
-
-</div>
+**目标不是产生更多数字，而是让这些数字逐渐具有真正的语义。**

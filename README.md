@@ -1,542 +1,272 @@
-<div align="center">
+# 📊 Sentiment Analyzer
 
-# 🧠 Sentiment Analyzer
+> **Visualize how sentiment flows, changes, and shifts throughout a text.**  
+> **不只判断一篇文章是“积极还是消极”，而是观察情绪如何在文本中流动与变化。**
 
-### Article & Long-Text Sentiment Analysis with Visualized Emotional Flow
+A Python sentiment analysis project built with **TextBlob**, **Newspaper3k**, and **Matplotlib**.
 
-### 网页文章 · 本地文本 · 长文本情感趋势分析与可视化
-
-![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)
-![TextBlob](https://img.shields.io/badge/TextBlob-Sentiment-orange)
-![Newspaper3k](https://img.shields.io/badge/Newspaper3k-Article-lightgrey)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-Visualization-blue)
-![Version](https://img.shields.io/badge/Version-v1.1.0-purple)
-
-A lightweight NLP tool that analyzes sentiment from web articles and local text files,
-tracks emotional changes throughout the text, and visualizes the overall sentiment flow.
-
-一个轻量级 NLP 情感分析工具，支持网页文章和本地文本，
-不仅能够计算全文情感倾向，还能够分析文本内部的情绪变化并进行可视化。
-
-</div>
+一个基于 Python 的文本情感分析项目，支持网页文章与本地文本分析、长文本情感趋势可视化以及关键情绪变化定位。
 
 ---
 
-## ✨ Overview / 项目简介
+## ✨ Features / 功能
 
-Traditional sentiment analysis often returns only one final score for an entire text.
+### 🌐 Flexible Text Input / 灵活的文本输入
 
-For example:
+- Analyze online articles from a **URL**
+- Analyze local **TXT files**
+- Automatically extract article text with Newspaper3k
 
-```text
-Sentiment Score: 0.13
-```
+支持网页 URL 与本地 TXT 文件，并可自动提取网页正文。
 
-While useful, a single score cannot explain **where positive or negative emotions appear inside the text**.
+### 💬 Sentiment Analysis / 情感分析
 
-Sentiment Analyzer extends this idea by analyzing the internal emotional structure of the text.
+- Calculate the **overall sentiment score**
+- Analyze sentiment at the **segment level**
+- Polarity ranges approximately from `-1` to `1`
 
-Instead of only asking:
+不仅计算全文情感分数，还会进一步分析文本内部不同区域的情感倾向。
 
-> Is this text positive or negative?
+### 📈 Sentiment Flow / 情感走势
 
-the program can also explore:
+Instead of reducing an entire text to a single score, the analyzer tracks sentiment throughout the text.
 
-> How does sentiment change throughout the text?
-
----
-
-传统的文本情感分析通常只返回一个最终分数，例如：
-
-```text
-Sentiment Score: 0.13
-```
-
-这个结果可以描述全文的整体情感倾向，但无法告诉我们：
-
-**文本中的情绪究竟在哪里发生变化？**
-
-因此，本项目在整体情感分析的基础上进一步加入文本分段分析和趋势可视化。
-
-除了回答：
-
-> 这篇文本整体偏正面还是负面？
-
-还可以进一步观察：
-
-> 情绪在全文中是如何变化的？
-
----
-
-## 🚀 Key Features / 核心功能
-
-### 🌐 Web Article Analysis / 网页文章分析
-
-Enter an article URL and the program automatically extracts the main article text using Newspaper3k.
-
-输入网页 URL 后，程序会自动提取网页中的文章正文并进行情感分析。
-
-```text
-Choose input type (url/txt): url
-Enter article URL: ...
-```
-
----
-
-### 📄 Local TXT Analysis / 本地文本分析
-
-Local `.txt` files are also supported.
-
-This makes it possible to analyze:
-
-- Articles
-- Essays
-- Reviews
-- Speeches
-- Literary excerpts
-- Long-form text
-
-同时支持读取本地 `.txt` 文件，因此不仅可以分析网页文章，也可以分析已经保存到本地的文本内容。
-
-```text
-Choose input type (url/txt): txt
-Enter txt file name: test.txt
-```
-
----
-
-### ❤️ Overall Sentiment Analysis / 全文情感分析
-
-The complete text is analyzed using TextBlob to calculate an overall polarity score.
-
-程序首先使用 TextBlob 对全文进行整体情感分析。
-
-The polarity score generally ranges from:
-
-```text
--1.0  ←────────  0  ────────→  +1.0
-
-Negative        Neutral        Positive
-```
-
-| Score / 分数 | Sentiment / 情感 |
-|---|---|
-| `< 0` | 😞 Negative / 负面 |
-| `0` | 😐 Neutral / 中性 |
-| `> 0` | 😊 Positive / 正面 |
-
----
-
-## 🔍 Segment-Level Sentiment Analysis / 文本分段情感分析
-
-Instead of analyzing only the entire document, the program divides the text into smaller segments.
-
-Each segment is analyzed independently:
-
-```text
-Full Text
-   ↓
-Segment 1 → Sentiment Score
-Segment 2 → Sentiment Score
-Segment 3 → Sentiment Score
-Segment 4 → Sentiment Score
-   ...
-```
-
-This makes it possible to observe emotional changes that would otherwise disappear inside a single overall score.
-
----
-
-程序不会只分析全文。
-
-文本会被划分为多个片段，并分别计算情感分数：
-
-```text
-全文
- ↓
-文本片段 1 → 情感分数
-文本片段 2 → 情感分数
-文本片段 3 → 情感分数
-文本片段 4 → 情感分数
- ...
-```
-
-因此可以观察到全文平均分数背后更加细致的情绪变化。
-
----
-
-## 📚 Adaptive Long-Text Processing / 长文本自适应处理
-
-One of the main features of the project is its handling of long texts.
-
-一项核心功能是对较长文本进行自动处理。
-
-### The Problem / 问题
-
-A short paragraph may contain only a few sentiment points.
-
-But a long article or book can contain:
-
-```text
-1000+
-2000+
-3000+
-```
-
-text segments.
-
-Displaying thousands of sentiment points directly creates an extremely dense chart that is difficult to interpret.
-
-如果直接把数千个情感分析结果全部绘制在一张图上，会导致图表非常密集，难以观察真正的情绪趋势。
-
-### The Solution / 解决方案
-
-The program first analyzes **every text segment**.
-
-It does **not randomly sample only 50 pieces of the text**.
-
-程序首先会分析 **全文所有文本片段**。
-
-并不是简单地从长文本中随机抽取 50 个片段。
-
-For example:
-
-```text
-Long Text
-   ↓
-1000 Text Segments
-   ↓
-Analyze ALL 1000 Segments
-   ↓
-1000 Sentiment Scores
-```
-
-When the number of sentiment scores becomes too large for clear visualization, the program groups them into approximately **50 regions**.
-
-```text
-1000 Sentiment Scores
-        ↓
-Divide into ~50 Regions
-        ↓
-~20 Scores per Region
-        ↓
-Calculate Average Sentiment
-        ↓
-~50 Visualization Points
-```
-
-也就是说：
-
-```text
-1000 个文本片段
-        ↓
-1000 个全部进行情感分析
-        ↓
-得到 1000 个情感分数
-        ↓
-按照文本顺序划分为约 50 个区间
-        ↓
-计算每个区间的平均情感
-        ↓
-最终显示约 50 个趋势点
-```
-
-This preserves information from the **entire text** while keeping the visualization readable.
-
-这样既不会忽略长文本的大部分内容，又能够避免数千个数据点同时出现导致图表失去可读性。
-
----
-
-## 📈 Sentiment Flow Visualization / 情感趋势可视化
-
-Matplotlib is used to visualize sentiment changes throughout the text.
-
-程序使用 Matplotlib 绘制全文情感变化趋势。
-
-The visualization includes:
-
-- 🔵 **Blue line** — sentiment trend
-- 🟢 **Green background** — positive sentiment region
-- 🔴 **Red background** — negative sentiment region
-- 🟢 **Green highlighted point** — most positive region
-- 🔴 **Red highlighted point** — most negative region
-- 📍 **X-axis** — approximate character position in the original text
-- 📊 **Y-axis** — sentiment polarity score
-
----
-
-图表中的不同元素分别表示：
-
-- 🔵 **蓝色曲线** —— 全文情感变化趋势
-- 🟢 **绿色背景区域** —— 正面情感范围
-- 🔴 **红色背景区域** —— 负面情感范围
-- 🟢 **绿色突出点** —— 情绪最积极的区域
-- 🔴 **红色突出点** —— 情绪最消极的区域
-- 📍 **横坐标** —— 对应内容在原文中的字符位置
-- 📊 **纵坐标** —— 情感极性分数
-
----
-
-## 🟢 Most Positive & 🔴 Most Negative Regions
-
-The program automatically identifies the highest and lowest values in the displayed sentiment trend.
-
-For long texts, these points represent the regions with the:
-
-```text
-Highest Average Sentiment
-          🟢
-
-Lowest Average Sentiment
-          🔴
-```
-
-Rather than simply identifying one isolated emotional word or sentence, grouped long-text analysis helps reveal areas where the **overall local sentiment** is particularly positive or negative.
-
----
-
-程序还会自动识别情感趋势中的最高点和最低点。
-
-对于经过分组处理的长文本：
-
-```text
-🟢 Most Positive
-```
-
-表示平均情感最积极的文本区域。
-
-```text
-🔴 Most Negative
-```
-
-表示平均情感最消极的文本区域。
-
-因此，长文本中的最高点和最低点并不只是某一个孤立单词产生的极端分数，而更接近某一段文本整体表现出的情绪倾向。
-
----
-
-## 📍 Character Position Tracking / 原文位置定位
-
-Reducing thousands of sentiment scores to approximately 50 visualization points creates another problem:
-
-```text
-Point 1
-Point 2
-Point 3
-...
-Point 50
-```
-
-These numbers alone do not tell us where the corresponding content appears in the original text.
-
-Therefore, the program preserves the approximate **character position** of each analyzed region.
-
-Instead of showing only:
-
-```text
-1    2    3    4    5 ... 50
-```
-
-the X-axis corresponds to positions in the original text:
-
-```text
-0      5000      10000      15000      20000
-                 Character Position
-```
-
-This makes the sentiment chart easier to connect back to the original document.
-
----
-
-将大量数据压缩成约 50 个趋势点之后，如果横坐标只显示：
-
-```text
-1、2、3、4……50
-```
-
-实际上很难知道这些点对应原文的哪个位置。
-
-因此，本项目保留文本片段在原文中的字符位置。
-
-横坐标可以直接表示该情绪区域大约出现在全文的什么位置，从而帮助用户根据图表重新定位到原文内容。
-
----
-
-## 🧩 Short Text vs Long Text / 短文本与长文本
-
-The analyzer automatically uses different visualization strategies depending on text length.
-
-### Short Text
-
-For short texts:
+不同于只输出一个总分，本项目会追踪情感在整篇文本中的变化过程。
 
 ```text
 Text
- ↓
-Segment Analysis
- ↓
-Individual Sentiment Scores
- ↓
-Direct Visualization
+ │
+ ├── Segment 1  →  Sentiment Score
+ ├── Segment 2  →  Sentiment Score
+ ├── Segment 3  →  Sentiment Score
+ │
+ ▼
+Sentiment Flow
 ```
 
-Detailed sentiment changes are preserved.
+The most positive and negative regions are automatically highlighted.
 
-### Long Text
+同时自动标记：
 
-For long texts:
+- 🟢 **Most Positive Region / 最积极区域**
+- 🔴 **Most Negative Region / 最消极区域**
+
+### ⚡ Sentiment Change / 情绪变化
+
+The project also measures the difference between consecutive sentiment regions:
 
 ```text
-Text
- ↓
-All Segments Analyzed
- ↓
-Large Number of Sentiment Scores
- ↓
-Grouped into ~50 Regions
- ↓
-Average Sentiment per Region
- ↓
-Trend Visualization
+Sentiment Change = Current Score - Previous Score
 ```
 
-This creates a balance between **detail** and **readability**.
+通过比较相邻区域的情感分数，可以进一步发现：
+
+- ▲ **Strongest Rise / 最大情绪上升**
+- ▼ **Strongest Drop / 最大情绪下降**
+- ⚡ **Most Dramatic Change / 最剧烈情绪变化**
+
+### 🔎 Before & After Context / 变化前后原文定位
+
+For the most dramatic sentiment shift, the analyzer displays:
+
+```text
+Most Dramatic Sentiment Change
+------------------------------
+Position: ...
+Change: ...
+
+Before:
+Position: ... - ...
+Original text...
+
+After:
+Position: ... - ...
+Original text...
+```
+
+不仅告诉你“哪里变化最大”，还会定位到原文，并显示变化前后的文本内容。
 
 ---
 
-程序会根据文本长度采用不同的展示方式。
+## 📚 Long-Text Analysis / 长文本分析
 
-**短文本：**
+Long texts can contain hundreds or thousands of sentiment segments.
 
-保留更加细致的文本片段情感结果。
+Displaying every point directly would make the graph difficult to read.
 
-**长文本：**
+长篇文章或书籍可能产生大量情感数据点，如果全部直接绘制，图表会非常拥挤。
 
-仍然分析全文，但将大量分析结果按顺序分组并计算平均值，用于观察整体趋势。
-
-因此可以在：
+This project therefore:
 
 ```text
-分析细节  ←────────→  图表可读性
+Full Text Analysis
+        ↓
+All Segments Receive Sentiment Scores
+        ↓
+Automatic Grouping
+        ↓
+Average Sentiment per Group
+        ↓
+Readable Visualization
 ```
 
-之间取得平衡。
+**The full text is still analyzed.**
+
+The project does **not** randomly sample only a few sections.  
+Instead, sentiment results are automatically grouped for visualization while preserving their relationship with the original text.
+
+**全文仍然参与情感分析。**
+
+长文本只是在可视化阶段进行自动分组和平均，从而减少图表中的显示点数量，而不是随机丢弃文本。
 
 ---
 
-## ⚙️ How It Works / 工作流程
+## 📍 Character Position Mapping / 字符位置映射
+
+Each analyzed region keeps track of its position in the original text.
+
+每个分析区域都会保存其在原文中的字符位置：
 
 ```text
-                    URL
-                     │
-                     │
-Local TXT ───────→ Full Text
-                     │
-                     ▼
-              Text Segmentation
-                     │
-                     ▼
-          Analyze Every Text Segment
-                     │
-                     ▼
-              Sentiment Scores
-                     │
-             ┌───────┴───────┐
-             │               │
-        Short Text        Long Text
-             │               │
-             │               ▼
-             │       Group into ~50 Regions
-             │               │
-             │               ▼
-             │       Calculate Group Average
-             │               │
-             └───────┬───────┘
-                     │
-                     ▼
-          Character Position Mapping
-                     │
-                     ▼
-            Sentiment Visualization
-                     │
-              ┌──────┴──────┐
-              │             │
-              ▼             ▼
-       Most Positive   Most Negative
-             🟢             🔴
+Original Text
+0 ------------------------------------------> N
+
+        ↑
+   Sentiment Region
+   Start Position
+   End Position
 ```
+
+This makes it possible to connect visualization results back to the exact original content.
+
+因此，当程序发现关键情绪区域或剧烈变化时，可以重新定位到对应原文，而不仅仅得到一个抽象的分数。
+
+---
+
+## 🔄 How It Works / 工作流程
+
+```text
+URL / TXT
+    │
+    ▼
+Text Loading
+文本加载
+    │
+    ▼
+Text Segmentation
+文本分段
+    │
+    ▼
+Segment Sentiment Analysis
+分段情感分析
+    │
+    ▼
+Long-Text Aggregation
+长文本显示聚合
+    │
+    ▼
+Sentiment Flow
+情感走势
+    │
+    ▼
+Sentiment Change Analysis
+情绪变化分析
+    │
+    ▼
+Key Change Detection
+关键变化检测
+    │
+    ▼
+Before / After Context
+变化前后原文定位
+    │
+    ▼
+Visualization
+可视化
+```
+
+---
+
+## 🧩 Code Structure / 代码结构
+
+The analysis pipeline has been separated into reusable functions:
+
+```python
+load_text()
+split_text()
+analyze_sentiment()
+prepare_display_data()
+calculate_changes()
+find_key_changes()
+print_dramatic_changes()
+plot_results()
+```
+
+Each function is responsible for one stage of the pipeline.
+
+经过重构后，不同功能被拆分到独立函数中，使主流程更加清晰，也方便后续继续扩展。
 
 ---
 
 ## 🛠️ Tech Stack / 技术栈
 
-| Technology | Usage |
+| Technology | Purpose / 用途 |
 |---|---|
-| **Python** | Main programming language |
-| **TextBlob** | Sentiment polarity analysis |
-| **Newspaper3k** | Web article extraction |
-| **Matplotlib** | Sentiment visualization |
-| **Regular Expressions** | Text segmentation |
+| Python | Core programming language / 核心开发语言 |
+| TextBlob | Sentiment polarity analysis / 情感极性分析 |
+| Newspaper3k | Article extraction from URLs / 网页文章提取 |
+| Matplotlib | Sentiment visualization / 情感可视化 |
+| Regex | Text segmentation and position tracking / 文本分段与位置追踪 |
 
 ---
 
-## 🚀 Quick Start / 快速开始
+## 🚀 Installation / 安装
 
-### 1. Clone the repository
+Clone the repository and install the dependencies:
 
-```bash
-git clone <repository-url>
-cd Sentiment-Analyzer
-```
-
-### 2. Install dependencies
+克隆项目并安装依赖：
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run the program
+NLTK data may also be required:
+
+```bash
+python -m nltk.downloader punkt_tab
+```
+
+---
+
+## ▶️ Usage / 使用方法
+
+Run:
 
 ```bash
 python main.py
 ```
 
----
-
-## 💻 Usage / 使用方法
-
-After starting the program:
+Then choose the input type:
 
 ```text
 Choose input type (url/txt):
 ```
 
-### Analyze a Web Article
+For an online article:
 
 ```text
-Choose input type (url/txt): url
-Enter article URL: https://example.com/article
+url
 ```
 
-### Analyze a Local TXT File
+For a local text file:
 
 ```text
-Choose input type (url/txt): txt
-Enter txt file name: test.txt
+txt
 ```
 
-The program will output:
+The program will analyze the text and display the sentiment results and visualizations.
 
-```text
-Original Text
-Overall Sentiment Score
-Segment Sentiment Scores
-Number of Original Analysis Points
-Number of Visualization Points
-Sentiment Flow Chart
-Most Positive Region
-Most Negative Region
-```
+程序会自动完成文本分析，并输出关键情绪变化与可视化结果。
 
 ---
 
@@ -554,80 +284,61 @@ Sentiment-Analyzer/
 
 ---
 
-## ⚠️ Limitations / 局限性
+## 📌 Version / 当前版本
 
-### English-focused Sentiment Analysis
+### v1.2.0
 
-TextBlob works primarily with English text.
+**Sentiment Change & Code Refactoring**
 
-TextBlob 主要适用于英文情感分析。
+- Added sentiment change visualization  
+  新增情绪变化可视化
 
-Chinese text is not reliably analyzed by the current implementation.
+- Added strongest rise and drop detection  
+  新增最大情绪上升与下降检测
 
-当前版本暂时无法可靠地分析中文文本的情感倾向。
+- Added most dramatic sentiment change detection  
+  新增最剧烈情绪变化检测
 
-### Complex Language
+- Added exact Before / After text context  
+  新增变化前后原文定位
 
-Sentiment analysis is based largely on lexical information.
+- Improved long-text position tracking  
+  优化长文本字符位置追踪
 
-Therefore, complex language such as:
-
-- Sarcasm
-- Irony
-- Metaphor
-- Literary expressions
-- Context-dependent emotions
-
-may not always be interpreted correctly.
-
-例如文学作品中的隐喻、反讽以及依赖上下文才能理解的情绪表达，可能无法被 TextBlob 准确识别。
-
-### Sentiment Scores Are Estimates
-
-The visualization should be interpreted as an approximate representation of lexical sentiment rather than an exact measurement of human emotion.
-
-情感分数更适合被理解为一种文本情感倾向的近似分析，而不是对真实人类情绪的精确测量。
+- Refactored the analysis pipeline into reusable functions  
+  将分析流程重构为多个独立函数
 
 ---
 
-## 🏷️ Version
+## 🗺️ Roadmap / 后续计划
 
-### v1.1.0 — Sentiment Flow Update
+Possible future improvements:
 
-New features:
+未来可以继续探索：
 
-- 📈 Added sentiment flow visualization
-- 🔍 Added segment-level sentiment analysis
-- 📚 Added automatic long-text handling
-- 📊 Added grouped sentiment averages for long documents
-- 📍 Added original character-position tracking
-- 🟢 Added most positive region detection
-- 🔴 Added most negative region detection
-- 🌐 Supports web articles
-- 📄 Supports local TXT files
+- Turning-point detection / 情绪转折点检测
+- Context-aware sentiment analysis / 上下文情感分析
+- Sarcasm and irony detection / 反讽与讽刺识别
+- Multilingual sentiment analysis / 多语言情感分析
+- Transformer / BERT based models
+- PyTorch-based deep learning sentiment model
 
 ---
 
-## 🔮 Possible Future Improvements / 未来方向
+## ⚠️ Limitations / 当前局限
 
-Possible future extensions include:
+The current version primarily relies on **TextBlob**, which works best with English text and lexicon-based sentiment patterns.
 
-- More advanced NLP sentiment models
-- Better multilingual sentiment analysis
-- Interactive visualization
-- Web interface
-- More detailed text-region inspection
+当前版本主要基于 TextBlob，因此更适合英文文本。对于中文、复杂上下文、文学表达、反讽和讽刺等情况，分析结果可能存在明显局限。
 
-未来可以进一步尝试更加先进的 NLP 模型、多语言情感分析以及交互式可视化。
+This project should therefore be viewed as an **exploratory sentiment analysis and visualization tool**, rather than a system that perfectly understands human emotion.
+
+因此，本项目更适合作为一个**情感分析与文本情绪可视化工具**，而不是能够完全理解人类情绪的系统。
 
 ---
 
-<div align="center">
+## 📄 License
 
-### 🧠 Analyze the Text. Visualize the Emotion.
+This project is intended for learning, experimentation, and further development.
 
-**Built with Python · TextBlob · Newspaper3k · Matplotlib**
-
-**Version 1.1.0**
-
-</div>
+本项目主要用于学习、实验与后续开发。
